@@ -1,0 +1,45 @@
+body {
+    background-color: #180F2A;
+}
+
+.container {
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    height: 100%;
+    padding-bottom: 50px;
+}
+
+.form-group {
+    padding: 5px;
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+.menu-dropdown {
+    width: 100%;
+    background-color: #26193f;
+    color: white;
+}
+
+.menu-dropdown:focus {
+    background-color: #26193f;
+    color: white;
+}
+
+.menu-dropdown:hover {
+    background-color: #26193f;
+    color: white;
+}
+
+.inp {
+    width: 70%;
+    color: white;
+    background-color: transparent;
+}
+
+.inp:focus {
+    color: white;
+    background-color: transparent;
+}

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="./styles.css" />
+  <title>Calculadora de Bitcoin</title>
+  <script>
+    fetch('https://api.binance.com/api/v3/ticker/price?symbol=BTCBRL')
+    .then(response => response.json())
+    .then(data => {
+        document.getElementById("value-to").value = parseFloat(
+            1 * parseFloat(data.price)).toFixed(2)
+    })
+  </script>
+</head>
+<body>
+  <div class="container mt-5">
+    <div class="form-group">
+      <input type="number" class="form-control inp" value="1" id="value-from" placeholder="0">
+      <select class="form-control menu-dropdown" id="menu-dropdown-from">
+        <option value="btc">BTC</option>
+        <option value="sats">SATS</option>
+    </select>
+    </div>
+    <div class="form-group">
+      <input type="number" class="form-control inp" id="value-to" value="0" placeholder="$ 0,00">
+      <select class="form-control menu-dropdown" id="menu-dropdown-to">
+        <option value="brl">BRL</option>
+        <option value="usd">USD</option>
+      </select>
+    </div>
+  </div>
+
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
