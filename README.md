@@ -1,1 +1,1 @@
-# bitcoin-calculator
+# Bitcoin Calculator
