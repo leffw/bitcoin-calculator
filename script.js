@@ -1,68 +1,64 @@
-function convertFromTo() {
-    var value_from = document.getElementById("value-from").value;    
-    var unit_from = document.getElementById("menu-dropdown-from").value;
-    var unit_to = document.getElementById("menu-dropdown-to").value;
-    if (unit_from === "sats") {
-        value_from = value_from / Math.pow(10, 8)
-    };
+let price_brl;
+let price_usd;
 
+async function fetchData() {
+  try {
+    const responseBRL = await fetch('https://api.binance.com/api/v3/ticker/price?symbol=BTCBRL');
+    const responseUSD = await fetch('https://api.binance.com/api/v3/ticker/price?symbol=BTCUSDT');
+    const dataBRL = await responseBRL.json();
+    const dataUSD = await responseUSD.json();
+    price_brl = dataBRL.price;
+    price_usd = dataUSD.price;
+  } catch (err) {
+    price_brl = 0;
+    price_usd = 0;
+    console.log(err);
+  }
+}
+
+fetchData();
+
+function convertFromTo() {
+  var value_from = document.getElementById("value-from").value;
+  var unit_from = document.getElementById("menu-dropdown-from").value;
+  var unit_to = document.getElementById("menu-dropdown-to").value;
+
+  if (unit_from === "sats") {
+    value_from = value_from / Math.pow(10, 8);
+  }
+
+  if (price_brl && price_usd) {
     if (unit_to === "brl") {
-        fetch('https://api.binance.com/api/v3/ticker/price?symbol=BTCBRL')
-        .then(response => response.json())
-        .then(data => {
-            document.getElementById("value-to").value = parseFloat(
-                value_from * parseFloat(data.price)).toFixed(2)
-        });
+      document.getElementById("value-to").value = parseFloat(value_from * parseFloat(price_brl)).toFixed(2);
     } else if (unit_to === "usd") {
-        fetch('https://api.binance.com/api/v3/ticker/price?symbol=BTCUSDT')
-        .then(response => response.json())
-        .then(data => {
-            document.getElementById("value-to").value = parseFloat(
-                value_from * parseFloat(data.price)).toFixed(2)
-        });
-    };
-};
+      document.getElementById("value-to").value = parseFloat(value_from * parseFloat(price_usd)).toFixed(2);
+    }
+  }
+}
 
 function convertToFrom() {
-    var unit_from = document.getElementById("menu-dropdown-from").value;
-    var value_to = document.getElementById("value-to").value;    
-    var unit_to = document.getElementById("menu-dropdown-to").value;
+  var unit_from = document.getElementById("menu-dropdown-from").value;
+  var value_to = document.getElementById("value-to").value;
+  var unit_to = document.getElementById("menu-dropdown-to").value;
 
+  if (price_brl && price_usd) {
     if (unit_to === "brl") {
-        fetch('https://api.binance.com/api/v3/ticker/price?symbol=BTCBRL')
-        .then(response => response.json())
-        .then(data => {
-            if (unit_from == "btc") {
-                document.getElementById("value-from").value = parseFloat(
-                    value_to / parseFloat(data.price)).toFixed(8)
-            } else if (unit_from == "sats") {
-                document.getElementById("value-from").value = parseFloat(
-                    (value_to / parseFloat(data.price)) * Math.pow(10, 8)).toFixed(0)  
-            };
-        });
+      if (unit_from === "btc") {
+        document.getElementById("value-from").value = parseFloat(value_to / parseFloat(price_brl)).toFixed(8);
+      } else if (unit_from === "sats") {
+        document.getElementById("value-from").value = parseFloat((value_to / parseFloat(price_brl)) * Math.pow(10, 8)).toFixed(0);
+      }
     } else if (unit_to === "usd") {
-        fetch('https://api.binance.com/api/v3/ticker/price?symbol=BTCUSDT')
-        .then(response => response.json())
-        .then(data => {
-            if (unit_from == "btc") {
-                document.getElementById("value-from").value = parseFloat(
-                    value_to / parseFloat(data.price)).toFixed(8)
-            } else if (unit_from == "sats") {
-                document.getElementById("value-from").value = parseFloat(
-                    (value_to / parseFloat(data.price)) * Math.pow(10, 8)).toFixed(0)  
-            }
-        });
-    };
-};
+      if (unit_from === "btc") {
+        document.getElementById("value-from").value = parseFloat(value_to / parseFloat(price_usd)).toFixed(8);
+      } else if (unit_from === "sats") {
+        document.getElementById("value-from").value = parseFloat((value_to / parseFloat(price_usd)) * Math.pow(10, 8)).toFixed(0);
+      }
+    }
+  }
+}
 
-document.getElementById("value-from").addEventListener(
-    "change", () => convertFromTo());
-
-document.getElementById("menu-dropdown-from").addEventListener(
-    "change", () => convertFromTo());
-
-document.getElementById("value-to").addEventListener(
-    "input", () => convertToFrom());
-
-document.getElementById("menu-dropdown-to").addEventListener(
-    "change", () => convertToFrom());
+document.getElementById("value-from").addEventListener("input", () => convertFromTo());
+document.getElementById("menu-dropdown-from").addEventListener("change", () => convertFromTo());
+document.getElementById("value-to").addEventListener("input", () => convertToFrom());
+document.getElementById("menu-dropdown-to").addEventListener("change", () => convertToFrom());
