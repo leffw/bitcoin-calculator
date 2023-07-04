@@ -19,46 +19,52 @@ async function fetchData() {
 fetchData();
 
 function convertFromTo() {
-  var value_from = document.getElementById("value-from").value;
-  var unit_from = document.getElementById("menu-dropdown-from").value;
-  var unit_to = document.getElementById("menu-dropdown-to").value;
+  const value_from = parseFloat(document.getElementById("value-from").value);
+  const unit_from = document.getElementById("menu-dropdown-from").value;
+  const unit_to = document.getElementById("menu-dropdown-to").value;
+
+  let convertedValue;
 
   if (unit_from === "sats") {
-    value_from = value_from / Math.pow(10, 8);
+    convertedValue = value_from / Math.pow(10, 8);
+  } else {
+    convertedValue = value_from;
   }
 
   if (price_brl && price_usd) {
     if (unit_to === "brl") {
-      document.getElementById("value-to").value = parseFloat(value_from * parseFloat(price_brl)).toFixed(2);
+      document.getElementById("value-to").value = (convertedValue * parseFloat(price_brl)).toFixed(2);
     } else if (unit_to === "usd") {
-      document.getElementById("value-to").value = parseFloat(value_from * parseFloat(price_usd)).toFixed(2);
+      document.getElementById("value-to").value = (convertedValue * parseFloat(price_usd)).toFixed(2);
     }
   }
 }
 
 function convertToFrom() {
-  var unit_from = document.getElementById("menu-dropdown-from").value;
-  var value_to = document.getElementById("value-to").value;
-  var unit_to = document.getElementById("menu-dropdown-to").value;
+  const unit_from = document.getElementById("menu-dropdown-from").value;
+  const value_from = document.getElementById("value-from").value;
+  const unit_to = document.getElementById("menu-dropdown-to").value;
 
-  if (price_brl && price_usd) {
-    if (unit_to === "brl") {
-      if (unit_from === "btc") {
-        document.getElementById("value-from").value = parseFloat(value_to / parseFloat(price_brl)).toFixed(8);
-      } else if (unit_from === "sats") {
-        document.getElementById("value-from").value = parseFloat((value_to / parseFloat(price_brl)) * Math.pow(10, 8)).toFixed(0);
-      }
-    } else if (unit_to === "usd") {
-      if (unit_from === "btc") {
-        document.getElementById("value-from").value = parseFloat(value_to / parseFloat(price_usd)).toFixed(8);
-      } else if (unit_from === "sats") {
-        document.getElementById("value-from").value = parseFloat((value_to / parseFloat(price_usd)) * Math.pow(10, 8)).toFixed(0);
-      }
+  if (unit_to === "brl") {
+    if (unit_from === "btc") {
+      document.getElementById("value-to").value = value_from * price_brl
+    } else if (unit_from === "sats") {
+      document.getElementById("value-to").value = (
+        (value_from / Math.pow(10, 8)) * price_brl).toFixed(0);
+    }
+  } else if (unit_to === "usd") {
+    if (unit_from === "btc") {
+      document.getElementById("value-to").value = value_from * price_usd
+    } else if (unit_from === "sats") {
+      document.getElementById("value-to").value = (
+        (value_from / Math.pow(10, 8)) * price_usd).toFixed(0);
     }
   }
 }
 
-document.getElementById("value-from").addEventListener("input", () => convertFromTo());
-document.getElementById("menu-dropdown-from").addEventListener("change", () => convertFromTo());
-document.getElementById("value-to").addEventListener("input", () => convertToFrom());
-document.getElementById("menu-dropdown-to").addEventListener("change", () => convertToFrom());
+document.getElementById("value-from").addEventListener("input", convertFromTo);
+document.getElementById("value-to").addEventListener("input", convertToFrom);
+document.getElementById("menu-dropdown-from").addEventListener(
+  "change", convertFromTo);
+document.getElementById("menu-dropdown-to").addEventListener(
+  "change", convertToFrom);
