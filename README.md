@@ -3,6 +3,8 @@
 
 This is a project for an MVP (Minimum Viable Product) of a value conversion calculator between Bitcoin (BTC) and Brazilian (BRL) and American (USD) currencies.
 
+Demo: https://leffw.github.io/bitcoin-calculator/
+
 ## Embedding via iFrame
 Embed the calculator on your website, follow the example below:
 
