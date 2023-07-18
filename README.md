@@ -47,3 +47,7 @@ Embed the calculator on your website, follow the example below:
 </body>
 </html>
 ```
+
+## List of companies using the software.
+- https://www.areabitcoin.com.br/calculadora-bitcoin
+
