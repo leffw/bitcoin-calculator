@@ -17,6 +17,31 @@ async function fetchData() {
 
 fetchData();
 
+function convertSatsToBTC() {
+  var value_from = document.getElementById("value-from").value;
+  var unit_from = document.getElementById("menu-dropdown-from").value;
+  var unit_to = document.getElementById("menu-dropdown-to").value;
+
+  if (unit_from === "sats" && unit_to === "btc") {
+    document.getElementById("value-to").value = parseFloat(value_from / Math.pow(10, 8)).toFixed(8);
+  }
+}
+
+function convertBTCToSats() {
+  var value_from = document.getElementById("value-from").value;
+  var unit_from = document.getElementById("menu-dropdown-from").value;
+  var value_to = document.getElementById("value-to").value;
+  var unit_to = document.getElementById("menu-dropdown-to").value;
+  
+  console.log(unit_from, unit_to)
+  if (unit_from === "btc" && unit_to === "sats") {
+    document.getElementById("value-to").value = parseFloat(value_from * Math.pow(10, 8)).toFixed(0);
+  }
+  if (unit_from === "sats" && unit_to === "btc") {
+    document.getElementById("value-from").value = parseFloat(value_to * Math.pow(10, 8)).toFixed(0);
+  }
+}
+
 function convertFromTo() {
   var value_from = document.getElementById("value-from").value;    
   var unit_from = document.getElementById("menu-dropdown-from").value;
@@ -39,7 +64,6 @@ function convertToFrom() {
   var value_to = document.getElementById("value-to").value;    
   var unit_to = document.getElementById("menu-dropdown-to").value;
 
-  console.log(price_usd)
   if (unit_to === "brl") {
       if (unit_from == "btc") {
           document.getElementById("value-from").value = parseFloat(
@@ -58,15 +82,30 @@ function convertToFrom() {
       }
   };
 };
-
 document.getElementById("value-from").addEventListener(
-  "change", () => convertFromTo());
+  "input", () => {
+    convertFromTo();
+    convertSatsToBTC();
+  }
+);
 
 document.getElementById("menu-dropdown-from").addEventListener(
-  "change", () => convertFromTo());
+  "change", () => {
+    convertFromTo();
+    convertSatsToBTC();
+  }
+);
 
 document.getElementById("value-to").addEventListener(
-  "input", () => convertToFrom());
+  "input", () => {
+    convertToFrom();
+    convertBTCToSats();
+  }
+);
 
 document.getElementById("menu-dropdown-to").addEventListener(
-  "change", () => convertToFrom());
+  "change", () => {
+    convertToFrom();
+    convertBTCToSats();
+  }
+);
